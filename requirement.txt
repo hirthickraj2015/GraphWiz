@@ -1,0 +1,8 @@
+streamlit==1.30.0
+neo4j==5.14.0
+sentence-transformers==2.2.2
+faiss-cpu==1.7.4
+transformers==4.41.0
+torch==2.1.0
+tqdm==4.66.1
+numpy==1.26.2
