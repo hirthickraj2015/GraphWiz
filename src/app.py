@@ -5,17 +5,19 @@ import faiss
 import streamlit as st
 from sentence_transformers import SentenceTransformer
 from transformers import pipeline
+import os
 
 # --------------------
 # Config
 # --------------------
+BASE_DIR = os.path.dirname(__file__)  # src/
 EMBED_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 EMBEDDING_DIM = 384
 TOP_K = 5
-INDEX_FILE = "data/faiss_index_ivf.bin"
-META_FILE = "data/nodes_meta.json"
-EMB_ARRAY_FILE = "data/embeddings.npy"
-CONTEXT_FILE = "data/nodes_context.json"
+INDEX_FILE = os.path.join(BASE_DIR, "data/faiss_index_ivf.bin")
+META_FILE = os.path.join(BASE_DIR, "data/nodes_meta.json")
+EMB_ARRAY_FILE = os.path.join(BASE_DIR, "data/embeddings.npy")
+CONTEXT_FILE = os.path.join(BASE_DIR, "data/nodes_context.json")
 HF_MODEL = "google/flan-t5-small"  # optional for answer generation
 
 # --------------------
@@ -40,9 +42,7 @@ def load_gen_model():
     except Exception:
         return None
 
-# --------------------
-# Semantic search
-# --------------------
+
 def semantic_search(query, embed_model, idx, metas):
     q_emb = embed_model.encode(query, convert_to_numpy=True)
     D, I = idx.search(np.array([q_emb]), TOP_K)
