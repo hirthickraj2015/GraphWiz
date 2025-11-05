@@ -20,12 +20,14 @@ EMB_ARRAY_FILE = os.path.join(BASE_DIR, "data/embeddings.npy")
 CONTEXT_FILE = os.path.join(BASE_DIR, "data/nodes_context.json")
 HF_MODEL = "google/flan-t5-small"  # optional for answer generation
 
+
 # --------------------
 # Load everything into memory
 # --------------------
 @st.cache_resource
 def load_embedding_model():
     return SentenceTransformer(EMBED_MODEL_NAME)
+
 
 @st.cache_resource
 def load_faiss_and_meta():
@@ -34,6 +36,7 @@ def load_faiss_and_meta():
     metas = json.load(open(META_FILE, "r", encoding="utf-8"))
     contexts = json.load(open(CONTEXT_FILE, "r", encoding="utf-8"))
     return index, metas, embeddings, contexts
+
 
 @st.cache_resource
 def load_gen_model():
@@ -53,24 +56,43 @@ def semantic_search(query, embed_model, idx, metas):
         results.append((metas[i], float(D[0][k])))
     return results
 
+
 # --------------------
 # Streamlit UI
 # --------------------
 st.set_page_config(page_title="⚡ Lightning GraphRAG", layout="wide")
 st.title("🇮🇪 Ireland KG — Lightning GraphRAG")
+st.write("""
+Welcome to the Ireland Knowledge Graph-based retrieval system.  
+Ask a question about Ireland and get answers sourced from a knowledge graph built on Wikipedia data.
+""")
 
+# Warning Box
+st.warning("⚠️ This is a prototype: Retrieval and response generation are not fine-tuned and may produce inaccurate or random answers.")
+
+# Suggested Questions
+st.markdown("#### Suggested Questions")
+st.markdown("""
+- What is the oldest university in Ireland?  
+- Capital of Ireland?  
+- Who is the current president of Ireland?  
+- When did Ireland join the European Union?  
+""")
+
+# Sidebar
 st.sidebar.markdown("### ⚙️ Options")
-st.sidebar.markdown("Index & embeddings must be prebuilt via `build_index.py`.")
+st.sidebar.info("Index & embeddings must be prebuilt via `build_index.py`.")
 
 # Load all in-memory
 embed_model = load_embedding_model()
 idx, metas, embeddings, contexts = load_faiss_and_meta()
 gen_model = load_gen_model()
 
+# User Question Input
 question = st.text_input("🔍 Ask a question about Ireland:")
 
 if st.button("Search") and question:
-    with st.spinner("Searching..."):
+    with st.spinner("🔍 Searching..."):
         # Semantic search
         results = semantic_search(question, embed_model, idx, metas)
         uris = [meta["uri"] for meta, _ in results]
@@ -88,7 +110,7 @@ if st.button("Search") and question:
         else:
             answer = "No generation model configured. Showing raw context:\n\n" + "\n".join(context_list)
 
-    st.markdown("### ✅ Answer")
+    st.markdown("### Answer")
     st.write(answer)
 
     st.markdown("---")

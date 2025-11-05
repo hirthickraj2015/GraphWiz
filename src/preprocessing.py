@@ -122,4 +122,4 @@ if __name__ == "__main__":
     index = build_faiss_index(embeddings, nlist=256)
     faiss.write_index(index, INDEX_FILE)
 
-    print("✅ Preprocessing complete. FAISS index, embeddings, metadata, and context saved!")
+    print(" Preprocessing complete. FAISS index, embeddings, metadata, and context saved!")
