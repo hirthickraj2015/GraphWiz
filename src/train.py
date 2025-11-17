@@ -1,0 +1,4 @@
+"""GraphWiz"""
+
+def main():
+    pass
