@@ -7,6 +7,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+.claude
 .Python
 build/
 develop-eggs/
@@ -205,3 +206,34 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# GraphWiz Project Specific
+# Data files (large)
+dataset/wikipedia_ireland/*.json
+dataset/wikipedia_ireland/*.pkl
+dataset/wikipedia_ireland/*.bin
+dataset/wikipedia_ireland/*.npy
+dataset/*.csv
+
+# Model files
+*.h5
+*.hdf5
+*.model
+*.pt
+*.pth
+
+# Credentials (IMPORTANT!)
+*_creds.txt
+*credentials*
+Neo4j_creds.txt
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Old system files
+dbpedia-venv/
+src/data/
+
+# OS
+.DS_Store
+Thumbs.db
